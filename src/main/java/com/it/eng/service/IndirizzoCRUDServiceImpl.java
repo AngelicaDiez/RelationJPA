@@ -51,7 +51,7 @@ public class IndirizzoCRUDServiceImpl implements IndirizzoCRUDService{
 	@Override
 	public void delete(String via) {
 		IndirizzoDTO2 result = findByVia(via);
-		IndirizzoDTO dto = new IndirizzoDTO(repository.findIDByVia(via), result.getVia(), result.getNumero());
+		IndirizzoDTO dto = new IndirizzoDTO(repository.findIdByVia(via), result.getVia(), result.getNumero());
 		Indirizzo entity = CustomObjectMapper.map(dto, Indirizzo.class);
 		repository.delete(entity);
 	}

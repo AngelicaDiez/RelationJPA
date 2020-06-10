@@ -74,7 +74,6 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		System.out.println("Delete dell'indirizzo");
 		indirizzoService.delete("Corso Buenos Aires");
 		
-		
 	}
 
 }

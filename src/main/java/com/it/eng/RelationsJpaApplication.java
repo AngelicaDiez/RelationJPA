@@ -1,5 +1,7 @@
 package com.it.eng;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.it.eng.dto.CategoriaDTO;
 import com.it.eng.dto.IndirizzoDTO2;
 import com.it.eng.dto.LibreriaDTO;
 import com.it.eng.dto.LibreriaDTO2;
+import com.it.eng.dto.LibroDTO;
+import com.it.eng.dto.LibroDTO2;
+import com.it.eng.service.CategoriaCRUDService;
 import com.it.eng.service.IndirizzoCRUDService;
 import com.it.eng.service.LibreriaCRUDService;
+import com.it.eng.service.LibroCRUDService;
 
 @SpringBootApplication
 public class RelationsJpaApplication implements CommandLineRunner{
@@ -22,6 +29,12 @@ public class RelationsJpaApplication implements CommandLineRunner{
 	@Autowired
 	private LibreriaCRUDService libreriaService;
 
+	@Autowired
+	private LibroCRUDService libroService;
+	
+	@Autowired
+	private CategoriaCRUDService categoriaService;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(RelationsJpaApplication.class, args);
 	}
@@ -74,6 +87,39 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		System.out.println("Delete dell'indirizzo");
 		indirizzoService.delete("Corso Buenos Aires");
 		
+		categoriaService.add(new CategoriaDTO(2, "Romanzo"));
+		
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2010-05-21");
+		libroService.add(new LibroDTO2("Fallen", "Lauren Kate", "Rizzoli", date, 1, 2));
+		
+		date = new SimpleDateFormat("yyyy-MM-dd").parse("2006-06-01");
+		libroService.add(new LibroDTO2("Twilight", "Stephenie Meyer", "Fazi Editore", date, 1, 2));
+		
+		System.out.println("Lista delle categorie:");
+		List<CategoriaDTO> categorie = categoriaService.findAll();
+		
+		for(int i=0; i<categorie.size(); i++) {
+			System.out.println(categorie.get(i).toString());
+		}
+		
+		System.out.println("Lista dei libri:");
+		List<LibroDTO> libri = libroService.findAll();
+		
+		for(int j=0; j<libri.size(); j++) {
+			System.out.println(libri.get(j).toString());
+		}
+		System.out.println("Update categoria 2");
+		categoriaService.update(2, new CategoriaDTO(2, "Paranormal romance"));
+		
+		System.out.println("Update del libro Fallen.");
+		libroService.update("Fallen", "Lauren Kate", new LibroDTO2("Fallen", "Lauren Kate", "Rizzoli", date, 2, 2));
+		
+		System.out.println("Delete dei libri.");
+		libroService.delete("Fallen", "Lauren Kate");
+		libroService.delete("Twilight", "Stephenie Meyer");
+		
+		System.out.println("Delete della categoria.");
+		categoriaService.delete(2);
 	}
 
 }

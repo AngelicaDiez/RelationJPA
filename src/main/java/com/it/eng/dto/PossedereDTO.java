@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaDTO implements Serializable {
+public class PossedereDTO implements Serializable{
 
 	private int id;
-	private String nome;
+	private LibreriaDTO id_libreria;
+	private LibroDTO libro;
 	
 	public String toString() {
-		return "[ id: " + id + ", nome: " + nome + " ]";
+		return "[ id: " + id + ", id libreria: " + id_libreria.getId() + ", titolo libro: " 
+				 + libro.getTitolo() + ", autore: " + libro.getAutore() + " ]";
 	}
 }

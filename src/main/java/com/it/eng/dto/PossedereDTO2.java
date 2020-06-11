@@ -10,12 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaDTO implements Serializable {
+public class PossedereDTO2 implements Serializable{
 
-	private int id;
-	private String nome;
-	
-	public String toString() {
-		return "[ id: " + id + ", nome: " + nome + " ]";
-	}
+	private int id_libreria;
+	private String titolo_libro;
+	private String autore_libro;
 }

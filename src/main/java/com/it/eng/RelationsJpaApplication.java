@@ -15,10 +15,13 @@ import com.it.eng.dto.LibreriaDTO;
 import com.it.eng.dto.LibreriaDTO2;
 import com.it.eng.dto.LibroDTO;
 import com.it.eng.dto.LibroDTO2;
+import com.it.eng.dto.PossedereDTO;
+import com.it.eng.dto.PossedereDTO2;
 import com.it.eng.service.CategoriaCRUDService;
 import com.it.eng.service.IndirizzoCRUDService;
 import com.it.eng.service.LibreriaCRUDService;
 import com.it.eng.service.LibroCRUDService;
+import com.it.eng.service.PossedereCRUDService;
 
 @SpringBootApplication
 public class RelationsJpaApplication implements CommandLineRunner{
@@ -35,11 +38,16 @@ public class RelationsJpaApplication implements CommandLineRunner{
 	@Autowired
 	private CategoriaCRUDService categoriaService;
 	
+	@Autowired
+	private PossedereCRUDService possedereService;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(RelationsJpaApplication.class, args);
 	}
 
 	public void run(String... args) throws Exception {
+		
+		// One-to-One
 		indirizzoService.add(new IndirizzoDTO2("Piazza Piemonte",3));
 		indirizzoService.add(new IndirizzoDTO2("Hoepli",5));
 		
@@ -62,22 +70,16 @@ public class RelationsJpaApplication implements CommandLineRunner{
 			System.out.println(librerie.get(j).toString());
 		}
 		
-		
-		System.out.println();
-		System.out.println("Ricerca indirizzo -> " + indirizzoService.findByVia("Piazza Piemonte").toString());
-		
-		System.out.println();
+		System.out.println("Ricerca indirizzo Hoepli-> " + indirizzoService.findByVia("Hoepli").toString());
+
 		System.out.println("Ricerca della libreria -> " + libreriaService.findById(2).toString());
 		
-		System.out.println();
 		System.out.println("Update dell'indirizzo con Corso Buenos Aires.");
-		indirizzoService.update("Piazza Piemonte", new IndirizzoDTO2("Corso Buenos Aires", 3));
+		indirizzoService.update("Hoepli", new IndirizzoDTO2("Corso Buenos Aires", 3));
 		
-		System.out.println();
 		System.out.println("Update della libreria.");
 		libreriaService.update(2, new LibreriaDTO2(2, "laFeltrinelli"));
 		
-		System.out.println();
 		System.out.println("Indirizzo modificato -> " + indirizzoService.findByVia("Corso Buenos Aires").toString());
 		System.out.println("Libreria modificata -> " + libreriaService.findById(2).toString());
 		
@@ -87,6 +89,8 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		System.out.println("Delete dell'indirizzo");
 		indirizzoService.delete("Corso Buenos Aires");
 		
+		
+		// One-to-Many
 		categoriaService.add(new CategoriaDTO(2, "Romanzo"));
 		
 		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2010-05-21");
@@ -120,6 +124,26 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		
 		System.out.println("Delete della categoria.");
 		categoriaService.delete(2);
+		
+		
+		// Many-To-Many
+		System.out.println("Lista.");
+		List<PossedereDTO> dto = possedereService.findAll();
+		
+		for(int k=0; k<dto.size(); k++) {
+			System.out.println(dto.get(k).toString());
+		}
+		
+		possedereService.add(new PossedereDTO2(2, "Twilight", "Stephenie Meyer"));
+		System.out.println("Nuova relazione aggiunta.");
+		
+		System.out.println("Relazione 4 -> " + possedereService.findById(2).toString());
+		
+		possedereService.update(4, new PossedereDTO2(1, "Twilight", "Stephenie Meyer"));
+		System.out.println("Relazione 4 modificata.");
+		
+		possedereService.delete(4);
+		System.out.println("Relazione 4 eliminata.");
 	}
 
 }
